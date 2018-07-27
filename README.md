@@ -43,7 +43,7 @@ For writing objects SharpYAJ expects the same object types like it produced when
 ```csharp
 using SharpYAJ;
 
-var serialized = YAJReader.WriteJSON(deserialized);
+var serialized = YAJWriter.WriteJSON(deserialized);
 //serialized: "[1,3,3,7,\"is\",true]"
 ```
 
@@ -54,7 +54,7 @@ If you want a pretty-printed JSON string, pass the `indention` flag to `WriteJSO
 ```csharp
 using SharpYAJ;
 
-var serialized = YAJReader.WriteJSON(deserialized, true);
+var serialized = YAJWriter.WriteJSON(deserialized, true);
 /*serialized:
 "[
 	1,
@@ -71,7 +71,7 @@ To specify the separation and line-break char, they can also be passed to `Write
 ```csharp
 using SharpYAJ;
 
-var serialized = YAJReader.WriteJSON(deserialized, "~~~~", "\r\n");
+var serialized = YAJWriter.WriteJSON(deserialized, "~~~~", "\r\n");
 /*serialized:
 "[
 ~~~~1,
@@ -99,7 +99,7 @@ class MyIndentWriter : IndentWriter
 
 var myIndentWriter = new MyIndentWriter();
 
-var serialized = YAJReader.WriteJSON(deserialized, myIndentWriter);
+var serialized = YAJWriter.WriteJSON(deserialized, myIndentWriter);
 ```
 
 ## License
