@@ -312,7 +312,6 @@ namespace SharpYAJ
 #endif
 		static double ReadDouble(StringView input)
 		{
-			bool doubleDot = false;
 			int nonNumberChars = 0;
 
 			int doubleDotOffset = -1;
@@ -327,13 +326,12 @@ namespace SharpYAJ
 					++nonNumberChars;
 					continue;
 				}
-				if(c == '.' && !doubleDot)
+				if(c == '.' && doubleDotOffset == -1)
 				{
 					if(offset == nonNumberChars)
 						throw new Exception($"Invalid float value at offset {input.offset}. Floats mustn't start with a dot");
 
 					doubleDotOffset = offset;
-					doubleDot = true;
 					++nonNumberChars;
 					continue;
 				}
