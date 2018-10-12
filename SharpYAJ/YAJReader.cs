@@ -314,6 +314,8 @@ namespace SharpYAJ
 		{
 			bool negative = false;
 			bool doubleDot = false;
+			int nonNumberChars = 0;
+
 			int doubleDotOffset = -1;
 
 			int offset = -1;
@@ -324,15 +326,17 @@ namespace SharpYAJ
 				if(c == '-' && offset == 0)
 				{
 					negative = true;
+					++nonNumberChars;
 					continue;
 				}
 				if(c == '.' && !doubleDot)
 				{
-					if(offset == 0 || (negative && offset == 1))
+					if(offset == nonNumberChars)
 						throw new Exception($"Invalid float value at offset {input.offset}. Floats mustn't start with a dot");
 
 					doubleDotOffset = offset;
 					doubleDot = true;
+					++nonNumberChars;
 					continue;
 				}
 				//ASCII 0 - 9
