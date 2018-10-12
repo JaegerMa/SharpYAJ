@@ -312,7 +312,6 @@ namespace SharpYAJ
 #endif
 		static double ReadDouble(StringView input)
 		{
-			bool negative = false;
 			bool doubleDot = false;
 			int nonNumberChars = 0;
 
@@ -325,7 +324,6 @@ namespace SharpYAJ
 
 				if(c == '-' && offset == 0)
 				{
-					negative = true;
 					++nonNumberChars;
 					continue;
 				}
