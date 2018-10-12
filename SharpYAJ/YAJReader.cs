@@ -270,7 +270,7 @@ namespace SharpYAJ
 			{
 				char c = input[offset];
 
-				if(c == '.')
+				if(c == '.' || c == 'e')
 					return ReadDouble(input);
 				if(c == '-' && offset == 0)
 					continue;
@@ -315,6 +315,8 @@ namespace SharpYAJ
 			int nonNumberChars = 0;
 
 			int doubleDotOffset = -1;
+			int eOffset = -1;
+			int eSignOffset = -1;
 
 			int offset = -1;
 			while(++offset < input.Length)
@@ -335,6 +337,20 @@ namespace SharpYAJ
 					++nonNumberChars;
 					continue;
 				}
+				if(c == 'e' && eOffset == -1)
+				{
+					if(offset == nonNumberChars)
+						throw new Exception($"Invalid float value at offset {input.offset}. Floats mustn't start with an 'e'");
+
+					eOffset = offset;
+					++nonNumberChars;
+					continue;
+				}
+				if((c == '+' || c == '-') && eOffset != -1 && offset == eOffset + 1)
+				{
+					eSignOffset = offset;
+					continue;
+				}
 				//ASCII 0 - 9
 				if(c >= 0x30 && c <= 0x39)
 					continue;
@@ -344,6 +360,10 @@ namespace SharpYAJ
 
 			if(doubleDotOffset == offset - 1)
 				throw new Exception($"Invalid float value at offset {input.offset}. Floats mustn't end with a dot");
+			if(eOffset == offset - 1)
+				throw new Exception($"Invalid float value at offset {input.offset}. Floats mustn't end with an 'e'");
+			if(eSignOffset == offset - 1)
+				throw new Exception($"Invalid float value at offset {input.offset}. Floats mustn't end with an 'e'-sign");
 
 			var doubleString = input.SubString(0, offset);
 			input.Move(offset);
