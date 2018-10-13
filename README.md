@@ -27,8 +27,8 @@ Beside `ReadJSON`, YAJReader contains methods like `ReadArray`, `ReadInt`, `Read
 To be more performant, the reading is done by simply moving a cursor over the string, so that a new substring does not have to be created for each element. This string-shifting is done by the internal class `StringView`. This class is also only shown if you activate compiliation flag `SHARE_INTERNAL_METHODS`. So for using the internal methods, you have to create a `StringView` instance.
 
 ## Writing
-For writing objects SharpYAJ expects the same object types like it produced when reading a string:
-- Objects have to be `Dictionary<string, object>`
+For writing objects SharpYAJ expects basically the same object types like it produced when reading a string:
+- Objects have to be `IDictionary<string, object>`
 - Arrays have to be `IEnumerable`
 - Allowed primitive types are
   - `short`

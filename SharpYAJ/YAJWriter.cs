@@ -54,13 +54,13 @@ namespace SharpYAJ
 			else if(input is null)
 				WriteNull(sb);
 			else if(IsObject(input))
-				WriteObject((Dictionary<string, object>)input, sb, indentWriter);
+				WriteObject((IDictionary<string, object>)input, sb, indentWriter);
 			else if(IsArray(input))
 				WriteArray((IEnumerable)input, sb, indentWriter);
 			else
 				WriteString(input.ToString(), sb);
 		}
-		public static void WriteObject(Dictionary<string, object> input, StringBuilder sb, IndentWriter indentWriter)
+		public static void WriteObject(IDictionary<string, object> input, StringBuilder sb, IndentWriter indentWriter)
 		{
 			sb.Append("{");
 			var childIndentWriter = indentWriter + 1;
@@ -163,7 +163,7 @@ namespace SharpYAJ
 
 		public static bool IsObject(object input)
 		{
-			return input is Dictionary<string, object>;
+			return input is IDictionary<string, object>;
 		}
 		public static bool IsArray(object input)
 		{
