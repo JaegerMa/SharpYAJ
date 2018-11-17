@@ -163,11 +163,33 @@ namespace SharpYAJ
 
 		public static bool IsObject(object input)
 		{
-			return input is IDictionary<string, object>;
+			return input is IDictionary<string, object> && !IsPrimitive(input);
 		}
 		public static bool IsArray(object input)
 		{
-			return input is IEnumerable;
+			return input is IEnumerable && !IsPrimitive(input);
+		}
+		public static bool IsPrimitive(object input)
+		{
+			switch(input)
+			{
+				case int intVal:
+				case string stringVal:
+				case char charVal:
+				case bool boolVal:
+				case float floatVal:
+				case long longVal:
+				case short shortVal:
+				case double doubleVal:
+				case uint uintVal:
+				case ushort ushortVal:
+				case ulong ulongVal:
+				case byte byteVal:
+				case sbyte sbyteVal:
+					return true;
+				default:
+					return false;
+			}
 		}
 	}
 }
