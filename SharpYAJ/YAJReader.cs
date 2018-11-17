@@ -148,6 +148,11 @@ namespace SharpYAJ
 #if SHARE_INTERNAL_METHODS
 			input.TrimStart();
 #endif
+
+			if(input.Length < 1 || input[0] != '"')
+				throw new Exception($"Unexpected value at offset {input.offset}. Expected object-key string at {input.offset}");
+
+
 			string key = ReadString(input);
 			input.TrimStart();
 
