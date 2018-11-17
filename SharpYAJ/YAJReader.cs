@@ -68,24 +68,30 @@ namespace SharpYAJ
 			if(input.Length < 1 || input[0] != '[')
 				throw new Exception($"No Array at offset {input.offset}");
 #endif
+			input.Move(1);
+
 
 			List<object> objects = new List<object>();
 			int startOffset = input.offset;
 
-			char separator;
-			while(input.Length != 0 && (separator = input[0]) != ']')
+			while(true)
 			{
-				if(separator == '[' || separator == ',')
-					input.Move(1);
-				else
-					throw new Exception($"Unexpected char at offset {input.offset}. Expected array separator ','");
-
 				input.TrimStart();
+				if(input.Length == 0 || input[0] == ']')
+					break;
+
 
 				object child = ReadElement(input);
 				objects.Add(child);
 
+
 				input.TrimStart();
+				if(input.Length == 0 || input[0] == ']')
+					break;
+
+				if(input[0] != ',')
+					throw new Exception($"Unexpected char at offset {input.offset}. Expected array separator ','");
+				input.Move(1);
 			}
 
 			if(input.Length == 0)
