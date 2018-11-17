@@ -104,20 +104,18 @@ namespace SharpYAJ
 			if(input.Length < 1 || input[0] != '{')
 				throw new Exception($"No Object at offset {input.offset}");
 #endif
+			input.Move(1);
+
 
 			Dictionary<string, object> childs = new Dictionary<string, object>();
 			int startOffset = input.offset;
 
-			char separator;
-			while(input.Length != 0 && (separator = input[0]) != '}')
+			while(true)
 			{
-				if(separator == '{' || separator == ',')
-					input.Move(1);
-				else
-					throw new Exception($"Unexpected char at offset {input.offset}. Expected object separator ','");
-
-
 				input.TrimStart();
+				if(input.Length == 0 || input[0] == '}')
+					break;
+
 
 				var entry = ReadObjectEntry(input);
 				if(childs.ContainsKey(entry.Item1))
@@ -125,9 +123,17 @@ namespace SharpYAJ
 
 				childs[entry.Item1] = entry.Item2;
 
+
 				input.TrimStart();
+				if(input.Length == 0 || input[0] == '}')
+					break;
+
+				if(input[0] != ',')
+					throw new Exception($"Unexpected char at offset {input.offset}. Expected object separator ','");
+				input.Move(1);
 			}
 
+			input.TrimStart();
 			if(input.Length == 0)
 				throw new Exception($"Object at offset {startOffset} isn't closed");
 
