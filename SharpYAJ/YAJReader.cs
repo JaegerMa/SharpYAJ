@@ -147,12 +147,11 @@ namespace SharpYAJ
 					break;
 #endif
 
+				var (key, value) = ReadObjectEntry(input);
+				if(childs.ContainsKey(key))
+					throw new Exception($"Key '{key}' already exists in object at offset {startOffset}");
 
-				var entry = ReadObjectEntry(input);
-				if(childs.ContainsKey(entry.Item1))
-					throw new Exception($"Key '{entry.Item1}' already existing in object at offset {startOffset}");
-
-				childs[entry.Item1] = entry.Item2;
+				childs[key] = value;
 
 
 				input.TrimStart();
@@ -174,7 +173,7 @@ namespace SharpYAJ
 #if SHARE_INTERNAL_METHODS
 		public
 #endif
-		static Tuple<string, object> ReadObjectEntry(StringView input)
+		static (string, object) ReadObjectEntry(StringView input)
 		{
 #if SHARE_INTERNAL_METHODS
 			input.TrimStart();
@@ -193,7 +192,7 @@ namespace SharpYAJ
 			input.Move(1);
 			object value = ReadElement(input);
 
-			return new Tuple<string, object>(key, value);
+			return (key, value);
 		}
 
 
