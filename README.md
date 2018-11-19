@@ -27,6 +27,12 @@ However if you want to parse such "invalid" JSON, you can enable that feature by
 
 A list of all supported flags is at the end of this README.
 
+### Comments
+JSON doesn't allow comments like programming languages do (e. g. `[1, 2, /* 3, */ 4]`), therefore SharpYAJ also doesn't allow it by default.
+However if you want to parse such "invalid" JSON, you can enable that feature by compiling with flags `ALLOW_LINE_COMMENTS` for `//`-comments and `ALLOW_BLOCK_COMMENTS` for `/* */`-comments.
+
+A list of all supported flags is at the end of this README.
+
 ### Using internal methods
 Beside `ReadJSON`, YAJReader contains methods like `ReadArray`, `ReadInt`, `ReadBool` and so on. These methods are used internally. If you want to use these methods for whatever reason, you have to tell SharpYAJ to perform additional checks in these methods, as by default they omit checks done by the SharpYAJ-caller method. To annouce the usage of these methods, compile the library with the `SHARE_INTERNAL_METHODS` flag.
 
@@ -115,6 +121,8 @@ Following compiler flags are supported by SharpYAJ:
 |USE_INTERNAL_METHODS|Makes some internal methods public and adds extra checks to them so they can be used safely|
 |ALLOW_TRAILING_ARRAY_COMMAS|Allow a trailing comma after the last element of an array|
 |ALLOW_TRAILING_OBJECT_COMMAS|Allow a trailing comma after the last entry of an object|
+|ALLOW_LINE_COMMENTS|Allow line comments `//` to mark the rest of the current line (until the next `\n`) as comment|
+|ALLOW_BLOCK_COMMENTS|Allow block comments `/* */` to mark a certain area as comment|
 
 ## License
 SharpYAJ is licensed under the MIT License

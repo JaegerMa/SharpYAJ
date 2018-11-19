@@ -9,7 +9,13 @@ namespace SharpYAJ
 	{
 		public static object ReadJSON(string input)
 		{
-			return ReadJSON(new StringView(input));
+			var stringView = new StringView(input);
+
+#if ALLOW_LINE_COMMENTS || ALLOW_BLOCK_COMMENTS
+			stringView = new CommentableStringView(input);
+#endif
+
+			return ReadJSON(stringView);
 		}
 #if SHARE_INTERNAL_METHODS
 		public

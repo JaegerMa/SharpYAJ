@@ -21,7 +21,7 @@ namespace SharpYAJ
 			this.offset = offset;
 		}
 
-		public void TrimStart()
+		public virtual void TrimStart()
 		{
 			while(this.Length != 0 && char.IsWhiteSpace(this[0]))
 				this.Move(1);
@@ -46,4 +46,50 @@ namespace SharpYAJ
 			return this.realString.Substring(this.offset);
 		}
 	}
+
+
+#if ALLOW_LINE_COMMENTS || ALLOW_BLOCK_COMMENTS
+	class CommentableStringView : StringView
+	{
+		public CommentableStringView(string realString, int offset = 0)
+			: base(realString, offset)
+		{ }
+
+		public override void TrimStart()
+		{
+			while(true)
+			{
+				while(this.Length != 0 && char.IsWhiteSpace(this[0]))
+					this.Move(1);
+
+#if ALLOW_LINE_COMMENTS
+				if(this.Length >= 2 && this[0] == '/' && this[1] == '/')
+				{
+					this.Move(2);
+					while(this.Length != 0 && this[0] != '\n')
+						this.Move(1);
+
+					continue;
+				}
+#endif
+#if ALLOW_BLOCK_COMMENTS
+				if(this.Length >= 2 && this[0] == '/' && this[1] == '*')
+				{
+					this.Move(2);
+					while(this.Length >= 2 && !(this[0] == '*' && this[1] == '/'))
+						this.Move(1);
+
+					if(this.Length >= 2)
+						this.Move(2);
+
+					continue;
+				}
+#endif
+
+
+				break;
+			}
+		}
+	}
+#endif
 }
