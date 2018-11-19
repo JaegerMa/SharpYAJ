@@ -21,6 +21,12 @@ object deserialized = YAJReader.ReadJSON(myJSONString);
 //deserialized: IEnumerable<object> { 1, 3, 3, 7, "is", true }
 ```
 
+### Trailing commas
+JSON doesn't allow trailing commas in arrays or objects like JavaScript does (e. g. `[1, 2, 3,]`), therefore SharpYAJ also doesn't allow it by default.
+However if you want to parse such "invalid" JSON, you can enable that feature by compiling with flags `ALLOW_TRAILING_ARRAY_COMMAS` and `ALLOW_TRAILING_OBJECT_COMMAS`.
+
+A list of all supported flags is at the end of this README.
+
 ### Using internal methods
 Beside `ReadJSON`, YAJReader contains methods like `ReadArray`, `ReadInt`, `ReadBool` and so on. These methods are used internally. If you want to use these methods for whatever reason, you have to tell SharpYAJ to perform additional checks in these methods, as by default they omit checks done by the SharpYAJ-caller method. To annouce the usage of these methods, compile the library with the `SHARE_INTERNAL_METHODS` flag.
 
@@ -101,6 +107,14 @@ var myIndentWriter = new MyIndentWriter();
 
 var serialized = YAJWriter.WriteJSON(deserialized, myIndentWriter);
 ```
+
+## Compiler flags
+Following compiler flags are supported by SharpYAJ:
+|Flag|Description|
+|---|---|
+|USE_INTERNAL_METHODS|Makes some internal methods public and adds extra checks to them so they can be used safely|
+|ALLOW_TRAILING_ARRAY_COMMAS|Allow a trailing comma after the last element of an array|
+|ALLOW_TRAILING_OBJECT_COMMAS|Allow a trailing comma after the last entry of an object|
 
 ## License
 SharpYAJ is licensed under the MIT License

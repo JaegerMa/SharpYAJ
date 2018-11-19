@@ -69,17 +69,26 @@ namespace SharpYAJ
 				throw new Exception($"No Array at offset {input.offset}");
 #endif
 			input.Move(1);
-
+			input.TrimStart();
 
 			List<object> objects = new List<object>();
 			int startOffset = input.offset;
 
+
+			if(input.Length != 0 && input[0] == ']')
+			{
+				input.Move(1);
+				return objects;
+			}
+
 			while(true)
 			{
 				input.TrimStart();
+
+#if ALLOW_TRAILING_ARRAY_COMMAS
 				if(input.Length == 0 || input[0] == ']')
 					break;
-
+#endif
 
 				object child = ReadElement(input);
 				objects.Add(child);
@@ -111,16 +120,26 @@ namespace SharpYAJ
 				throw new Exception($"No Object at offset {input.offset}");
 #endif
 			input.Move(1);
-
+			input.TrimStart();
 
 			Dictionary<string, object> childs = new Dictionary<string, object>();
 			int startOffset = input.offset;
 
+
+			if(input.Length != 0 && input[0] == '}')
+			{
+				input.Move(1);
+				return childs;
+			}
+
 			while(true)
 			{
 				input.TrimStart();
+
+#if ALLOW_TRAILING_OBJECT_COMMAS
 				if(input.Length == 0 || input[0] == '}')
 					break;
+#endif
 
 
 				var entry = ReadObjectEntry(input);
