@@ -116,6 +116,7 @@ var serialized = YAJWriter.WriteJSON(deserialized, myIndentWriter);
 
 ## Compiler flags
 Following compiler flags are supported by SharpYAJ:
+
 |Flag|Description|
 |---|---|
 |USE_INTERNAL_METHODS|Makes some internal methods public and adds extra checks to them so they can be used safely|
