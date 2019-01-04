@@ -327,7 +327,7 @@ namespace SharpYAJ
 #if SHARE_INTERNAL_METHODS
 		public
 #endif
-		static int ReadInt(StringView input)
+		static object ReadInt(StringView input)
 		{
 			int offset = -1;
 			while(++offset < input.Length)
@@ -346,7 +346,29 @@ namespace SharpYAJ
 			var intString = input.SubString(0, offset);
 			input.Move(offset);
 
-			return Convert.ToInt32(intString);
+
+			try
+			{
+				long longValue = Convert.ToInt64(intString);
+
+				//Previous versions always returned int32,
+				//and asint32 is the most common data type
+				//for numbers we return an int32 if possible
+				if(longValue >= int.MinValue && longValue <= int.MaxValue)
+					return (int)longValue;
+
+
+				return longValue;
+			}
+			catch(OverflowException) { }
+
+			try
+			{
+				return Convert.ToUInt64(intString);
+			}
+			catch(OverflowException) { }
+
+			return Convert.ToDouble(intString);
 		}
 #if SHARE_INTERNAL_METHODS
 		public

@@ -21,6 +21,16 @@ object deserialized = YAJReader.ReadJSON(myJSONString);
 //deserialized: IEnumerable<object> { 1, 3, 3, 7, "is", true }
 ```
 
+### Numbers
+In JSON, numbers can be infinitely high. In SharpYAJ they are read as follows:
+
+|Range|Read as|
+|---|---|
+| -2^31 to (2^31 - 1) | int32 |
+| -2^63 to (2^63 - 1) | int64/long |
+| 2^63 to (2^64 - 1) | uint64/ulong |
+| Everything else | double |
+
 ### Trailing commas
 JSON doesn't allow trailing commas in arrays or objects like JavaScript does (e. g. `[1, 2, 3,]`), therefore SharpYAJ also doesn't allow it by default.
 However if you want to parse such "invalid" JSON, you can enable that feature by compiling with flags `ALLOW_TRAILING_ARRAY_COMMAS` and `ALLOW_TRAILING_OBJECT_COMMAS`.
